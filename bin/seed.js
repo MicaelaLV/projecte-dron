@@ -9,10 +9,10 @@ const initialRacesData = [
   {
     name: "Miami Nights",
     level: 1,
-    price: 10,
-    given_points: 100,
-    quantity_people: 10,
     location: { type: "Point", coordinates: [2.189792, 41.390627] },
+    quantity_people: 10,
+    price: 10,
+    points: 100
   }
   // {
   //   name: "Mardi Gras",
@@ -112,16 +112,28 @@ const initialRacesData = [
 
 
 var raceIds = [];
+var pilotsIds = [];
 
+function createRaces(done) {
+  Race.create(initialRacesData, (err, docs) => {
+    if(err){
+        throw err;
+    }
+    docs.forEach((element) => {
+        raceIds.push(element.id);
+    });
+    console.log('races:', raceIds);
+    done();
+ });
+}
 
-Race.create(initialRacesData, (err, docs) => {
-  if(err){
-      throw err;
-  }
-  docs.forEach((element) => {
-      raceIds.push(element.id);
-  })
-  mongoose.connection.close();
+createRaces(() => {
+  // createPilots(() => {
+  //   addRacesToPilots(() => {
+  //     addPilotsToRaces(() => {
+          mongoose.connection.close();
+  //     });
+  //   })
+  // })
+});
 
-  console.log('races:', raceIds);
-})
